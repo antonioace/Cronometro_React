@@ -3,18 +3,44 @@ import React from "react";
 
 function ButtonCronometer(props) {
   return (
-    <div>
-   <Button 
-   type={!props.activarContador ? "primary" : "danger"}
-   onClick={props.cambiarEstadoContador}
-   >{!props.activarContador ? "Iniciar" : "Pausar"}</Button>
+    <div style={{
+      display:"flex",
+      flexDirection:"row",
+      marginTop:"0px",
+      justifyContent:"space-between"
+    }}>
+      <Button
+    
+        size={
+          props.tamanioCronometro === "grande"
+            ? "large"
+            : props.tamanioCronometro === "mediano"
+            ? "middle"
+            : "small"
+        }
+        style={{
+          backgroundColor: props.seccionBotones,
+        }}
+        onClick={props.cambiarEstadoContador}
+      >
+        {!props.activarContador ? "Iniciar" : "Pausar"}
+      </Button>
 
-
-     
-      <Button type="info" onClick={props.resetearCronometro}>
+      <Button
+       size={
+        props.tamanioCronometro === "grande"
+          ? "large"
+          : props.tamanioCronometro === "mediano"
+          ? "middle"
+          : "small"
+      }
+        style={{
+          backgroundColor: props.seccionBotones,
+        }}
+        onClick={props.resetearCronometro}
+      >
         Reiniciar
       </Button>
-      
     </div>
   );
 }
