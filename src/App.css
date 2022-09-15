@@ -28,6 +28,14 @@
   color: #61dafb;
 }
 
+
+
+.is-invalid{
+  border-style: solid;
+  border-color: crimson;
+
+
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

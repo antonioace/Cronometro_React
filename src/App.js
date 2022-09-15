@@ -1,9 +1,13 @@
 import "./App.css";
+
+
 import { useEffect, useState } from "react";
 
 import Cronometer from "./Cronometer/Cronometer";
 
 import FormDataCronometerAnt from "./FormDataCronometerAnt/FormDataCronometerAnt";
+import FormDataCronometerReactHooks from "./FormDataCronometerReactHooks/FormDataCronometerReactHooks";
+import FormCronometerDataAntReactHooks from "./FormCronometerDataAntReactHooks/FormCronometerDataAntReactHooks";
 
 function App() {
   const [listaColores, setListaColores] = useState([]);
@@ -11,23 +15,39 @@ function App() {
   const [datosFormulario, setDatosFormulario] = useState();
 
   return (
-    <div style={{
-      display:"flex",
-      flexDirection:"column",
-      justifyContent:"center",
-      aligItems:"center",
-      margin:"8em"
-    }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        aligItems: "center",
+        margin: "8em",
+      }}
+    >
       <Cronometer
         datosFormulario={datosFormulario}
         tamanioCronometro={tamanioCronometro}
         listaColores={listaColores}
       />
 
-      <FormDataCronometerAnt
+      {/*  <FormDataCronometerAnt
         setDatosFormulario={setDatosFormulario}
         setTamanioCronometro={setTamanioCronometro}
         setListaColores={setListaColores}
+      /> */}
+
+      {/*  <FormDataCronometerReactHooks
+       setDatosFormulario={setDatosFormulario}
+       setTamanioCronometro={setTamanioCronometro}
+       setListaColores={setListaColores}
+       listaColores={listaColores}
+      /> */}
+
+      <FormCronometerDataAntReactHooks
+        setDatosFormulario={setDatosFormulario}
+        setTamanioCronometro={setTamanioCronometro}
+        setListaColores={setListaColores}
+        listaColores={listaColores}
       />
     </div>
   );

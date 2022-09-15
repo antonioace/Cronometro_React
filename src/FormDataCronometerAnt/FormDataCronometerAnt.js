@@ -10,20 +10,7 @@ import {
   Select,
   Switch,
 } from "antd";
-import {
-  red,
-  volcano,
-  gold,
-  yellow,
-  lime,
-  green,
-  cyan,
-  blue,
-  geekblue,
-  purple,
-  magenta,
-  grey,
-} from "@ant-design/colors";
+
 import { Option } from "antd/lib/mentions";
 import Input from "antd/lib/input/Input";
 
@@ -71,6 +58,8 @@ function FormDataCronometerAnt({
   const agregarListaDeColores = (listaColoresValues) => {
     setListaColores(listaColoresValues);
   };
+
+ 
   return (
     <div
       style={{
