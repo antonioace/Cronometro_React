@@ -18,24 +18,31 @@ function FormCronometerDataAntReactHooks({
   const {
     handleSubmit,
     control,
-    formState: { errors },
-  } = useForm();
+    getFieldState,
+    formState: { errors, isValid, isDirty, dirtyFields },
+  } = useForm({ criteriaMode: "all" });
 
   const [mostrarInputNombreArchivo, setMostrarInputNombreArchivo] =
     useState(false);
   const [formaInputs, setFormaInputs] = useState("");
   const [mostrarInputSugerencia, setMostrarInputSugerencia] = useState(false);
 
+  const [validacionTiempoReal, setValidactionTiempoReal] = useState(false);
+
   const enviarDatos = (data) => {
-    console.log("Esta bien el formulario");
     console.log(data);
+    console.log("Esta bien el formulario");
+    console.log(dirtyFields);
     setDatosFormulario(data);
   };
 
   const enviarConErrores = (data) => {
     console.log("tiene errores el formulario : ", data);
+    console.log(dirtyFields);
   };
-  const validarNumeroSeaPar = (numero) => (numero % 2 === 0 ? true : false);
+
+  const fieldIsValid = () => {};
+
   return (
     <div
       style={{
@@ -263,8 +270,6 @@ function FormCronometerDataAntReactHooks({
               flexDirection: formaInputs === "horizontal" ? "column" : "row",
             }}
           >
-
-            
             <label style={estiloLabel}>Minutos:</label>
             <Controller
               control={control}
@@ -273,7 +278,7 @@ function FormCronometerDataAntReactHooks({
               render={({ field: { onChange, value } }) => {
                 return (
                   <InputNumber
-                  className={errors.minutos?"is-invalid":""}
+                    className={errors.minutos ? "is-invalid" : ""}
                     onChange={onChange}
                     value={value}
                     style={{ width: "30%", fontSize: "14px" }}
@@ -329,7 +334,7 @@ function FormCronometerDataAntReactHooks({
               render={({ field: { onChange, value } }) => {
                 return (
                   <InputNumber
-                  className={errors.segundos?"is-invalid":""}
+                    className={errors.segundos ? "is-invalid" : ""}
                     value={value}
                     onChange={onChange}
                     style={{ width: "30%", fontSize: "14px" }}
@@ -373,12 +378,22 @@ function FormCronometerDataAntReactHooks({
 
             <Controller
               control={control}
-              rules={{ required: true, min: 0, max: 99 }}
+              rules={{
+                required: {
+                  value: true,
+                  message: "No olvides poner los milisegundo",
+                },
+                min: { value: 0, message: "Minimo debe pone 0 milisegundos" },
+                max: {
+                  value: 99,
+                  message: "maximo debe poner 99 milisegundos",
+                },
+              }}
               name="milisegundos"
               render={({ field: { onChange, value } }) => {
                 return (
                   <InputNumber
-                  className={errors.milisegundos?"is-invalid":""}
+                    className={errors.milisegundos ? "is-invalid" : ""}
                     onChange={onChange}
                     style={{ width: "30%", fontSize: "14px" }}
                     placeholder="Pon los milisegundos"
@@ -386,7 +401,7 @@ function FormCronometerDataAntReactHooks({
                 );
               }}
             />
-            {errors.milisegundos?.type === "required" && (
+            {/*   {errors.milisegundos?.type === "required" && (
               <p
                 style={{ color: "red", fontWeight: "20px", marginLeft: "20px" }}
               >
@@ -406,57 +421,67 @@ function FormCronometerDataAntReactHooks({
               >
                 Solo puede poner minimo 0 milisegundos
               </p>
+            )} */}
+
+            {errors.milisegundos && (
+              <p
+                style={{ color: "red", fontWeight: "20px", marginLeft: "20px" }}
+              >
+                {errors.milisegundos?.message}
+              </p>
             )}
           </div>
         </div>
+
+        <div
+          style={{
+            display: "flex",
+            marginBottom: "15px",
+            marginRight: "20x",
+          }}
+        >
+          <label style={estiloLabel}>Campo Numero mayor a 0:</label>
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+
+              validate: {
+                positive: (v) => parseInt(v) > 0,
+              },
+            }}
+            name="campoNumeroPar"
+            render={({ field: { onChange, onBlur, value } }) => {
+              return (
+                <Input
+                  className={errors.campoNumeroPar ? "is-invalid" : ""}
+                  onChange={(event) => {
+                    Number(event.target.value) < 0
+                      ? setValidactionTiempoReal(true)
+                      : setValidactionTiempoReal(false);
+                    onChange(event.target.value);
+                  }}
+                  style={{ width: "30%", fontSize: "14px" }}
+                  placeholder="Ejemplo de validaciones"
+                ></Input>
+              );
+            }}
+          />
+          {errors.campoNumeroPar?.type === "required" && (
+            <p style={{ color: "red", fontWeight: "20px", marginLeft: "20px" }}>
+              El campo es requerido
+            </p>
+          )}
+
+          {(errors.campoNumeroPar?.type === "positive" ||
+            validacionTiempoReal) && (
+            <p style={{ color: "red", fontWeight: "20px", marginLeft: "20px" }}>
+              El numero debe ser positivo
+            </p>
+          )}
+        </div>
+
         <div>
-          <div>
-            <label style={estiloLabel}>Campo Numero mayor a 0:</label>
-            <Controller
-              control={control}
-              rules={{
-                required: true,
-                pattern:/^[0-9]*$/,
-                validate: {
-                  positive: (v) => parseInt(v) > 0,
-                },
-              }}
-              name="campoNumeroPar"
-              render={({ field: { onChange, value } }) => {
-                return (
-                  <Input
-                    className={errors.campoNumeroPar?"is-invalid":""}
-                    onChange={onChange}
-                    style={{ width: "30%", fontSize: "14px" }}
-                    placeholder="Ejemplo de validaciones"
-                  ></Input>
-                );
-              }}
-            />
-            {errors.campoNumeroPar?.type === "required" && (
-              <p
-                style={{ color: "red", fontWeight: "20px", marginLeft: "20px" }}
-              >
-                El campo es requerido
-              </p>
-            )}
-
-            {errors.campoNumeroPar?.type === "positive" && (
-              <p
-                style={{ color: "red", fontWeight: "20px", marginLeft: "20px" }}
-              >
-                El numero debe ser positivo
-              </p>
-            )}
-
-            {errors.campoNumeroPar?.type === "pattern" && (
-              <p
-                style={{ color: "red", fontWeight: "20px", marginLeft: "20px" }}
-              >
-                El campo debe tener solo numero
-              </p>
-            )}
-          </div>
           <Button type="primary" htmlType="submit">
             Guardar datos
           </Button>

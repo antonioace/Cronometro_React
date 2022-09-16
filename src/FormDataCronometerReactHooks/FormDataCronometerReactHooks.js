@@ -11,6 +11,7 @@ function FormDataCronometerReactHooks({
   const {
     register,
     formState: { errors },
+    getFieldState,
     watch,
     getValues,
     handleSubmit,
